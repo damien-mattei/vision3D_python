@@ -10,7 +10,11 @@ class Point3D:
 
     # p1=Point3D(1,2.2,3.3)
 
-    def __init__(self,x=0,y=0,z=0):
+    #     >>> p=Point3D()
+    # # Point3D constructor #
+    # >>> p
+    # Point3D @ 0x109750150 (0,0,0)
+    def __init__(self,x=0.0,y=0.0,z=0.0):
         
         self.x = x
         self.y = y
@@ -32,4 +36,14 @@ class Point3D:
     def __str__(self):
         return '({},{},{})'.format(self.x,self.y,self.z)
    
+        
+    def __eq__(self, other): 
+        if not isinstance(other, Point3D):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+
+        return self.x == other.x and self.y == other.y and self.z == other.z
+
+
+    
         

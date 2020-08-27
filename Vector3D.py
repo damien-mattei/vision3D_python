@@ -5,10 +5,13 @@ Vector3D.py
 Vector3D class.
 """
 
+from __future__ import annotations
+
 import math
 
+
 from Point3D import Point3D
-#import Point3D
+
 
 
 ##>>> overload.area(3)
@@ -20,13 +23,47 @@ from Point3D import Point3D
 from Overload import Overload_by_class,volume
 
 
-class Vector3D(object):
+# >>> v1=Vector3D(1.1,2.2,3.3)
+# Inside wrapped_function()
+#   name = __init__
+#   key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
+
+# Vector3D constructor #
+#class Vector3D(object):
+class Vector3D:
     '''Construct an object Vector3D.'''
 
-    # v1=Vector3D(1,2.2,3.3)
+    # v1=Vector3D(1.1,2.2,3.3)
 
-    def __init__(self,x,y,z):
-        
+    #v2=Vector3D() # does not work because before __init__ ?
+
+
+    #v2=Vector3D()
+    #Inside wrapped_function()
+     #  name = __init__
+    #   key = ('__init__', ('Vector3D',))
+    # # Vector3D constructor #
+    # >>> v2
+    # Inside wrapped_function()
+    #   name = __repr__
+    #   key = ('__repr__', ('Vector3D',))
+    # Vector3D @ 0x111d55e20 [0.0,0.0,0.0]
+    @Overload_by_class('Vector3D')
+    def __init__(self,x=0.0,y=0.0,z=0.0):
+
+       # v=Vector3D()
+        self.x = x 
+        self.y = y
+        self.z = z
+
+        if __debug__:
+            print("# Vector3D constructor #")
+
+            
+    @Overload_by_class('Vector3D',float,float,float)
+    def __init__(self,x=0.0,y=0.0,z=0.0):
+
+       # v=Vector3D()
         self.x = x 
         self.y = y
         self.z = z
@@ -34,11 +71,54 @@ class Vector3D(object):
         if __debug__:
             print("# Vector3D constructor #")
         
+    #v=Vector3D(Point3D(1.0,1.0,1.0),Point3D(3.0,3.0,3.0))
+    #     # Point3D constructor #
+    # # Point3D constructor #
+    # Inside wrapped_function()
+    #   name = __init__
+    #   key = ('__init__', ('Vector3D', 'Point3D', 'Point3D'))
+    # # Vector3D constructor #
+    # >>> v
+    # Inside wrapped_function()
+    #   name = __repr__
+    #   key = ('__repr__', ('Vector3D',))
+    # Vector3D @ 0x113aac910 [2.0,2.0,2.0]
+    @Overload_by_class('Vector3D',Point3D,Point3D)
+    def __init__(self,a=Point3D(),b=Point3D()):
+        
+        self.x = b.x - a.x
+        self.y = b.y - a.y
+        self.z = b.z - a.z
 
+        if __debug__:
+            print("# Vector3D constructor #")
+
+    #v=Vector3D((1,2,3),(4,5,6))
+    #   Overload.py : Inside wrapped_function()
+    #   name = __init__
+    #   key = ('__init__', ('Vector3D', 'tuple', 'tuple'))
+    # # Vector3D constructor #
+    # >>> v
+    # Overload.py : Inside wrapped_function()
+    #   name = __repr__
+    #   key = ('__repr__', ('Vector3D',))
+    # Vector3D @ 0x111100e20 [3,3,3]
+    @Overload_by_class('Vector3D',tuple,tuple)
+    def __init__(self,a,b):
+
+        (ax,ay,az)=a
+        (bx,by,bz)=b
+        self.x = bx - ax
+        self.y = by - ay
+        self.z = bz - az
+
+        if __debug__:
+            print("# Vector3D constructor #")
             
     # v1
     # Vector3D @ 0x7f7ded7869d0 [1,2.2,3.3]
 
+    @Overload_by_class('Vector3D')
     def __repr__(self):
         return 'Vector3D @ {} [{},{},{}]'.format(hex(id(self)),self.x,self.y,self.z)
 
@@ -49,6 +129,41 @@ class Vector3D(object):
     def __str__(self):
         return '[{},{},{}]'.format(self.x,self.y,self.z)
 
+
+    #     >>> v1=Vector3D(1,2.2,3.3)
+    #     # Vector3D constructor #
+    # >>> v2=Vector3D(2,2.2,3.3)
+    # # Vector3D constructor #
+    # >>> v1bis=Vector3D(1,2.2,3.3)
+    # # Vector3D constructor #
+    # >>> v1 is v2
+    # False
+    # >>> v1 == v2
+    # False
+    # >>> v1 == v1bis
+    # True
+    # >>> v1 is v1bis
+    # False
+    
+    #>>> v1=Vector3D(1,2.2,3.3)
+    # Vector3D constructor #
+    #>>> v1
+    #Vector3D @ 0x104a058d0 [1,2.2,3.3]
+    #>>> v2=v1
+    #>>> v2
+    #Vector3D @ 0x104a058d0 [1,2.2,3.3]
+    #>>> v1 is v2
+    #True
+    #>>> v1 == v2
+    #True
+    def __eq__(self, other): 
+        if not isinstance(other, Vector3D):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+
+        return self.x == other.x and self.y == other.y and self.z == other.z
+
+    
     
     # >>> p1=Point3D(1,2.2,3.3)
     # # Point3D constructor #
@@ -191,7 +306,7 @@ class Vector3D(object):
         z = self.z
         
         return Vector3D(y * v.z - z * v.y,
-		        z * v.x - x * v.z,
+                z * v.x - x * v.z,
 		        x * v.y - y * v.x)
 
     # >>> v1.norm()

@@ -5,6 +5,7 @@ Overload.py
 various overload implementations and examples.
 """
 
+from __future__ import annotations
 
 # Syntax for decorators with parameters
 
@@ -34,7 +35,7 @@ class Overload_by_class(object) :
         If there are decorator arguments, the function
         to be decorated is not passed to the constructor!
         """
-        print("Inside Overload_by_class : __init__()")
+        print("Overload.py : Inside Overload_by_class : __init__()")
         # store the decorator arguments for this instantiation
         # to use them later in the first __call__
         self.args_decorator = args_decorator 
@@ -47,10 +48,13 @@ class Overload_by_class(object) :
         once, as part of the decoration process! You can only give
         it a single argument, which is the function object.
         """
-        print("Inside Overload_by_class : __call__()")
+        print("Overload.py : Inside Overload_by_class : __call__()")
         name = function.__name__
         print("  name = {}".format(name))
-        key = (name,self.args_decorator)
+        args_deco=self.args_decorator
+        f_stringify = lambda x : x if type(x) is str else x.__name__
+        args_deco_string=tuple(map(f_stringify,args_deco))
+        key = (name,args_deco_string)
         print("  key = {}".format(key))
 
         # store function and arguments types in the class attribute dictionary
@@ -60,8 +64,8 @@ class Overload_by_class(object) :
         def wrapped_function(*args_function):
 
             # getting back the good function that match the argument types
-            print("Inside wrapped_function()")
-            types = tuple(arg.__class__ for arg in args_function)
+            print("Overload.py : Inside wrapped_function()")
+            types = tuple(arg.__class__.__name__ for arg in args_function)
             name = function.__name__
             print("  name = {}".format(name))
             key = (name,types)
