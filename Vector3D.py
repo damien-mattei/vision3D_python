@@ -5,7 +5,7 @@ Vector3D.py
 Vector3D class.
 """
 
-from __future__ import annotations
+#from __future__ import annotations
 
 import math
 
@@ -258,7 +258,7 @@ class Vector3D:
             print("Vector3D.py : __rmul__")
 
         # this creates operator overload
-        if isinstance(m,list): # matrix multiplication
+        if isinstance(m,list): # matrix multiplication TODO: change list with a Matrix3X3 class
 
             x = self.x
             y = self.y
