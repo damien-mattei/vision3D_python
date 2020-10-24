@@ -9,7 +9,10 @@ La classe Vision3D de base avec son main pour l'execution.
 from Point3D import Point3D
 from Vector3D import Vector3D
 from Universe import Universe
+from Matrix3x3 import Matrix3x3
 
+
+import math
 
 
 
@@ -28,6 +31,8 @@ class Vision3D:
 
         if __debug__:
             print("# Vision3D constructor #")
+
+        self.univ = Universe()
             
         self.c = c
         self.s = s
@@ -44,15 +49,18 @@ class Vision3D:
 
         # vector w
         # normalize w
-        w = Vector3D(sc / d)
+        w = sc / d
 
         # vector u
-        # WARNING seems python does not see as in C++ that u.y is perheaps not initialized
+       
         # arbitrary taking negative solution for orientation
-        u = Vector3D(0,- ( w.x / sqrt(w.x * w.x + w.y * w.y)), - w.y * u.y / w.x)
+        u = Vector3D()
+        u.x = 0
+        u.y = - ( w.x / math.sqrt(w.x * w.x + w.y * w.y))
+        u.z = - w.y * u.y / w.x
 
         # vector v
-        v = Vector3D(w ^ u)
+        v = w ^ u
 
         # change of basis matrix
 
@@ -61,10 +69,23 @@ class Vision3D:
         # da2 = v.z * w.x - v.x * w.z
         # da3 = v.x * w.y - v.y * w.x
         
-        da = Vector3D(v ^ w)
-        db = Vector3D(w ^ u)
-        dc = Vector3D(u ^ v)
+        da = v ^ w
+        db = w ^ u
+        dc = u ^ v
+
+        # dot products - produits scalaires
+        dau = u * da
+        dbv = v * db
+        dcw = w * dc
+
+        daqu = da / dau
+        dbqv = db / dbv
+        dcqw = dc / dcw
+
+        self.m3x3 = Matrix3x3(daqu,dbqv,dcqw)
         
     def __repr__(self):
         return 'Vision3D @ {} camera = {}  screen = {}'.format(hex(id(self)),self.c,self.s)
 
+    def __str__(self):
+        return 'Vision3D camera = {}  screen = {}'.format(self.c,self.s)

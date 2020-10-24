@@ -5,6 +5,13 @@ Universe.py
 The Universe class.
 """
 
+from Point3D import Point3D
+
+
+# >>> u=Universe()
+# # Universe constructor #
+# >>> u
+# <Universe.Universe object at 0x7fd66c551e90>
 
 
 # >> p1=u.createTuple3(1.0,2.2,3.3)
@@ -16,6 +23,8 @@ The Universe class.
 # >>> p1bis=u.createTuple3(1.0,2.2,3.3)
 # >>> p1 is p1bis
 # True
+
+
 class Universe:
     '''Construct an object Universe.'''
 
@@ -25,20 +34,39 @@ class Universe:
         self.tuple3list = []
 
         # DEPRECATED
-        self.point3DList = []
+        self.point3Dlist = []
 
         #if __debug__:
         print("# Universe constructor #")
         
     # create a point by checking if it already exist in the universe
     # DEPRECATED
-    def createPoint3D(x,y,z):
+    #    >>> u.createPoint3D(1,2,3)
+    # # Point3D constructor #
+    # Point3D @ 0x7f6874ec7cd0 (1,2,3)
+    # >>> u.createPoint3D(2,2,3)
+    # # Point3D constructor #
+    # Point3D @ 0x7f6874e7a590 (2,2,3)
+    # >>> p2=u.createPoint3D(1,2,3)
+    # # Point3D constructor #
+    # >>> p2
+    # Point3D @ 0x7f6874ec7cd0 (1,2,3)
+    def createPoint3D(self,x,y,z):
 
         p3d = Point3D(x,y,z)
 
-        return p3d
+        search = next((p for p in self.point3Dlist if p == p3d), None)
 
+        if search is None:
+            
+            self.point3Dlist.append(p3d)
+            return p3d
 
+        else:
+            return search
+        
+
+    # Point 3D will be tuple 3
     def createTuple3(self,x,y,z):
 
         p3d = (x,y,z)

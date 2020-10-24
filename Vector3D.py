@@ -276,7 +276,16 @@ class Vector3D:
         
             return self * m # self is at LEFT of operand *
 
+        
+    # overload / operator
+    
+    def __truediv__(self,d):
+        
+        x = self.x / d
+        y = self.y / d
+        z = self.z / d
 
+        return Vector3D(x,y,z)
         
 
     # overload += operator
@@ -299,14 +308,15 @@ class Vector3D:
 
 
     # cross product - produit vectoriel
-    def __pow__(self,v):
+    # operator syntax: v ^ v2
+    def __xor__(self,v):
 
         x = self.x
         y = self.y
         z = self.z
         
         return Vector3D(y * v.z - z * v.y,
-                z * v.x - x * v.z,
+                        z * v.x - x * v.z,
 		        x * v.y - y * v.x)
 
     # >>> v1.norm()
