@@ -5,6 +5,7 @@ Point3D.py
 La classe Point3D.
 """
 
+
 class Point3D:
     '''Construit un objet Point3D.'''
 
@@ -44,6 +45,5 @@ class Point3D:
 
         return self.x == other.x and self.y == other.y and self.z == other.z
 
-
-    
+   
         

@@ -32,24 +32,37 @@ class Vision3D:
         if __debug__:
             print("# Vision3D constructor #")
 
+        # data
         self.univ = Universe()
+
+        #  dico Points3D <-> Pixel
+        self.dicoPointPixel = {}
             
         self.c = c
         self.s = s
+
+        # pixel expressed in unit of frame reference 
+        self.pixelInUnit = 1
+
+        # pixels half-size of screen on Y
+        self.winHalfSizeY = 192
+
+        # pixels half-size of screen on X
+        self.winHalfSizeX = 280
 
         # compute vector w
 
         # create SC vector
         sc=Vector3D(c,s)
 
-        d = sc.norm() # compute norm of SC
+        self.d = sc.norm() # compute norm of SC
 
         
         # vectors defining screen frame       
 
         # vector w
         # normalize w
-        w = sc / d
+        w = sc / self.d
 
         # vector u
        
@@ -89,3 +102,62 @@ class Vision3D:
 
     def __str__(self):
         return 'Vision3D camera = {}  screen = {}'.format(self.c,self.s)
+
+    
+    # >>> vis.projection((2.7,3.2,3.7))
+    # Matrix3x3.py : __mul__
+    # (-0.2963092430786103, -0.17107422125480973) 
+    def projection(self,p):
+
+        pPrim = self.m3x3 * p
+
+        (x,y,z) = pPrim
+        
+        r = self.d / (self.d + z)
+
+        return (  y * r,- x * r )
+
+    
+    def convert2Pixel(self,p):
+
+        (x,y,z) = p
+
+        return (int(x * self.pixelInUnit), int(y * self.pixelInUnit))
+
+
+    def convert2AbsPixel(self,p):
+
+        (x,y) = p
+
+        return (x * self.winHalfSizeX, y * self.winHalfSizeY)
+
+    
+    def convert2ScreenCoord(self,p):
+
+        (x,y) = p
+
+        return ( x , 2 * winHalfSizeY - y )
+
+    
+    def projectPoint3DtoPixel(self,p):
+
+        return convert2ScreenCoord(
+                     convert2AbsPixel(
+					      convert2Pixel(
+							    projection(p))))
+
+
+    #  associate Point3D and Pixels in dictionary (Point3D <-> Pixel)
+    #     >>> vis.associatePt3Pix2InDico()
+    # >>> vis.dicoPointPixel
+    # {}
+    def associatePt3Pix2InDico(self):
+
+        # finding the vertex list
+        vertexList = self.univ.tuple3list
+
+        # iterate on the list to compute 3D to 2D projection and Pixels calculus
+        for P3D in vertexList:
+
+            pt2 = projectPoint3DtoPixel(P3D)
+            dicoPointPixel[P3D] = pt2

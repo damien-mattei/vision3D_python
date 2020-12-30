@@ -51,7 +51,6 @@ class Vector3D:
     @Overload_by_class('Vector3D')
     def __init__(self,x=0.0,y=0.0,z=0.0):
 
-       # v=Vector3D()
         self.x = x 
         self.y = y
         self.z = z
@@ -63,7 +62,6 @@ class Vector3D:
     @Overload_by_class('Vector3D',float,float,float)
     def __init__(self,x=0.0,y=0.0,z=0.0):
 
-       # v=Vector3D()
         self.x = x 
         self.y = y
         self.z = z
@@ -309,6 +307,7 @@ class Vector3D:
 
     # cross product - produit vectoriel
     # operator syntax: v ^ v2
+    # WARNING: this not XOR but CROSS PRODUCT
     def __xor__(self,v):
 
         x = self.x
