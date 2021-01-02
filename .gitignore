@@ -123,3 +123,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+Matrix3x3.py~
+Edge3D.py~
