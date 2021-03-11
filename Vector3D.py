@@ -326,6 +326,9 @@ class Vector3D:
         return math.sqrt(self * self)
 
 
+
+# code à enlever:
+
 #@overload(int)
 @Overload_by_class(int)
 def area1(size):
