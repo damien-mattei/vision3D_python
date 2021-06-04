@@ -5,9 +5,12 @@ Matrix3x3.py
 The class Matrix3x3.
 """
 
-from Point3D import Point3D # in Python ,opposite of C++ ,import from Vector containing Point are not seen from Matrix
-from Vector3D import Vector3D
-from Overload import Overload_by_class
+#from Point3D
+import Point3D # in Python ,opposite of C++ ,import from Vector containing Point are not seen from Matrix
+#from Vector3D
+import Vector3D
+
+from Overload import * #Overload_by_class
 
 
 # >>> m1=Matrix3x3()
