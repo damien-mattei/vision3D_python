@@ -5,8 +5,7 @@ Universe.py
 The Universe class.
 """
 
-#from Point3D
-import Point3D
+from Point3D import Point3D
 
 
 # >>> u=Universe()

@@ -6,14 +6,11 @@ La classe Vision3D de base avec son main pour l'execution.
 """
 #from __future__ import annotations
 
-#from Point3D
-import Point3D
-#from Vector3D
-import Vector3D
-#from Universe
-import Universe
-#from Matrix3x3
-import Matrix3x3
+from Point3D import Point3D
+#from Vector3DMultipleDispatchVersion import Vector3D
+from Vector3D import Vector3D
+from Universe import Universe
+from Matrix3x3 import Matrix3x3
 
 
 import math

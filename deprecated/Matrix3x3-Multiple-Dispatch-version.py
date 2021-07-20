@@ -6,11 +6,10 @@ The class Matrix3x3.
 """
 
 from Point3D import Point3D # in Python ,opposite of C++ ,import from Vector containing Point are not seen from Matrix
-#from Vector3DMultipleDispatchVersion import Vector3D
 from Vector3D import Vector3D
 
-#from OverloadByClass import * #Overload_by_class
-from Overload_by_class import Overload_by_class
+from OverloadByClass import * #Overload_by_class
+
 
 # >>> m1=Matrix3x3()
 # Overload.py : Inside wrapped_function()
@@ -36,9 +35,9 @@ class Matrix3x3:
     @Overload_by_class('Matrix3x3')
     def __init__(self):
 
-        self.M = [[0.0,0.0,0.0],
-                  [0.0,0.0,0.0],
-                  [0.0,0.0,0.0]]
+        self.M = [[0,0,0],
+                  [0,0,0],
+                  [0,0,0]]
 
         if __debug__:
             print("# Matrix3x3 constructor #")

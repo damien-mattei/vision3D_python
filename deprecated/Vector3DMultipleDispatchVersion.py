@@ -13,12 +13,10 @@ import math
 from Point3D import Point3D
 
 
+from multipledispatch import dispatch
 
 
-#from overloading import overload
 
-#from OverloadByClass import Overload_by_class#,volume
-from Overload_by_class import Overload_by_class#,volume
 
 # >>> v1=Vector3D(1.1,2.2,3.3)
 # Inside wrapped_function()
@@ -45,7 +43,7 @@ class Vector3D:
     #   name = __repr__
     #   key = ('__repr__', ('Vector3D',))
     # Vector3D @ 0x111d55e20 [0.0,0.0,0.0]
-    @Overload_by_class('Vector3D')
+    @dispatch()
     def __init__(self,x=0.0,y=0.0,z=0.0):
 
         self.x = x 
@@ -56,7 +54,7 @@ class Vector3D:
             print("# Vector3D constructor #")
 
             
-    @Overload_by_class('Vector3D',float,float,float)
+    @dispatch(float,float,float)
     def __init__(self,x=0.0,y=0.0,z=0.0):
 
         self.x = x 
@@ -65,18 +63,7 @@ class Vector3D:
 
         if __debug__:
             print("# Vector3D constructor #")
-
-
-    @Overload_by_class('Vector3D',int,int,int)
-    def __init__(self,x=0,y=0,z=0):
-
-        self.x = x 
-        self.y = y
-        self.z = z
-
-        if __debug__:
-            print("# Vector3D constructor #")
-    
+        
     #v=Vector3D(Point3D(1.0,1.0,1.0),Point3D(3.0,3.0,3.0))
     #     # Point3D constructor #
     # # Point3D constructor #
@@ -89,7 +76,7 @@ class Vector3D:
     #   name = __repr__
     #   key = ('__repr__', ('Vector3D',))
     # Vector3D @ 0x113aac910 [2.0,2.0,2.0]
-    @Overload_by_class('Vector3D',Point3D,Point3D)
+    @dispatch(Point3D,Point3D)
     def __init__(self,a=Point3D(),b=Point3D()):
         
         self.x = b.x - a.x
@@ -109,7 +96,7 @@ class Vector3D:
     #   name = __repr__
     #   key = ('__repr__', ('Vector3D',))
     # Vector3D @ 0x111100e20 [3,3,3]
-    @Overload_by_class('Vector3D',tuple,tuple)
+    @dispatch(tuple,tuple)
     def __init__(self,a,b):
 
         (ax,ay,az)=a
@@ -185,7 +172,7 @@ class Vector3D:
     # [0,1.0,1.0]
  
     @classmethod
-    def set_with_points_backup(cls,a,b):
+    def set_with_points(cls,a,b):
 
         ax = a.x
         ay = a.y
@@ -201,49 +188,7 @@ class Vector3D:
 
         return cls(x,y,z)
     
-
-# >>> p1=Point3D()
-# # Point3D constructor #
-# >>> p2=Point3D()
-# # Point3D constructor #
-# >>> v2=Vector3D(10.0,2.0,3.0)
-# OverloadByClass.py : Inside wrapped_function()
-# OverloadByClass : wrapped_function :  name = __init__
-# OverloadByClass : wrapped_function :  key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
-# # Vector3D constructor #
-# >>> v=Vector3D(1.0,2.0,3.0)
-# OverloadByClass.py : Inside wrapped_function()
-# OverloadByClass : wrapped_function :  name = __init__
-# OverloadByClass : wrapped_function :  key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
-# # Vector3D constructor #
-# >>> v.set_with_points(p1,p2)
-# >>> v
-# Vector3D @ 0x7f328e743450 [0.0,0.0,0.0]
-# >>> v=Vector3D(1.0,2.0,3.0)
-# OverloadByClass.py : Inside wrapped_function()
-# OverloadByClass : wrapped_function :  name = __init__
-# OverloadByClass : wrapped_function :  key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
-# # Vector3D constructor #
-# >>> v
-# Vector3D @ 0x7f328e743b50 [1.0,2.0,3.0]
-# >>> v.set_with_points(p1,p2)
-# >>> v
-# Vector3D @ 0x7f328e743b50 [0.0,0.0,0.0]
-    def set_with_points(self,a,b):
-
-        ax = a.x
-        ay = a.y
-        az = a.z
-
-        bx = b.x
-        by = b.y
-        bz = b.z
-
-        self.x = bx - ax
-        self.y = by - ay
-        self.z = bz - az
         
-    
     # overload + operator
     # >>> v1+v2
     # Vector3D constructor #
@@ -255,9 +200,25 @@ class Vector3D:
                         self.y + v.y,
                         self.z + v.z)
     
-    
-    @Overload_by_class('Vector3D', float)
-    @Overload_by_class('Vector3D', int)
+    # >>> v1=Vector3D(1.0,2.2,3.3)
+    # OverloadByClass.py : Inside wrapped_function()
+    # OverloadByClass : wrapped_function :  name = __init__
+    # OverloadByClass : wrapped_function :  key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
+    # # Vector3D constructor #
+    # >>> v1*3.2
+    # OverloadByClass.py : Inside wrapped_function()
+    # OverloadByClass : wrapped_function :  name = __mul__
+    # OverloadByClass : wrapped_function :  key = ('__mul__', ('Vector3D', 'float'))
+    # Vector3D.py : __mul__ ('Vector3D', float)
+    # OverloadByClass.py : Inside wrapped_function()
+    # OverloadByClass : wrapped_function :  name = __init__
+    # OverloadByClass : wrapped_function :  key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
+    # # Vector3D constructor #
+    # OverloadByClass.py : Inside wrapped_function()
+    # OverloadByClass : wrapped_function :  name = __repr__
+    # OverloadByClass : wrapped_function :  key = ('__repr__', ('Vector3D',))
+    # Vector3D @ 0x7fe4f0ae5b80 [3.2,7.040000000000001,10.56]
+    @dispatch(float)
     def __mul__(self,m): # self * m
 
         if __debug__:
@@ -268,7 +229,7 @@ class Vector3D:
                         self.y * m,
                         self.z * m)
 
-    @Overload_by_class('Vector3D', 'Vector3D')
+    @dispatch('Vector3D', 'Vector3D')
     def __mul__(self,m): # self * m
 
         if __debug__:
@@ -333,7 +294,7 @@ class Vector3D:
     # Vector3D @ 0x7f08c9283710 [15.299999999999999,34.8,54.3]
     
     # m  : multiplicand ,matrix,....
-    @Overload_by_class(list, 'Vector3D')
+    @dispatch(list, Vector3D)
     def __rmul__(self, m): #  self is at RIGHT of multiplication operand : m * self
 
         if __debug__:
@@ -347,7 +308,7 @@ class Vector3D:
                         m[1][0] * x + m[1][1] * y + m[1][2] * z,
                         m[2][0] * x + m[2][1] * y + m[2][2] * z)
 
-    @Overload_by_class(float, 'Vector3D')
+    @dispatch(float, Vector3D)
     def __rmul__(self, m): #  self is at RIGHT of multiplication operand : m * self
 
         if __debug__:
@@ -401,7 +362,7 @@ class Vector3D:
         
         return Vector3D(y * v.z - z * v.y,
                         z * v.x - x * v.z,
-                        x * v.y - y * v.x)
+		        x * v.y - y * v.x)
 
     # >>> v1.norm()
     # Vector3D.py : __mul__
