@@ -76,7 +76,7 @@ class Overload_by_class(object) :
     # will be common to all instanciations of this class
     function_dict = {}
     nb_deco = 0 # number of current decorator for same function overload (in case they are multiple)
-    #function_save = None # saved function to be used by all decorator overload in __call__ (in case thereis multiple overload for the same function code, exemaple: x + x with x float or int)
+    #function_save = None # saved function to be used by all decorator overload in __call__ (in case there is multiple overload for the same function code, exemaple: x + x with x float or int)
 
     # this functions handle the parameters of decorator : (decorator(params))
     def __init__(self,*args_decorator):
