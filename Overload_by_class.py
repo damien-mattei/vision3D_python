@@ -10,15 +10,15 @@ from __future__ import annotations
 # Syntax for decorators with parameters
 
 # @decorator(params)
-# def func_name():
+# def function():
 #     ''' Function implementation'''
 
 # The above code is equivalent to
 
-# def func_name():
+# def function():
 #     ''' Function implementation'''
 
-# func_name = (decorator(params))(func_name)
+# function = (decorator(params))(function)
 # """
 
 # OverloadByClass.py : Inside Overload_by_class : __init__()
@@ -100,7 +100,7 @@ class Overload_by_class(object) :
         self.args_decorator = args_decorator 
 
 
-    # this function do that: (decorator(params))(func_name)
+    # this function do that: (decorator(params))(function)
     def __call__(self, function):
         
         """
@@ -153,10 +153,10 @@ class Overload_by_class(object) :
             #print("After function_found(*args_function)")
 
             # return a clozure where it is function_dict
-            return wrapped_function
+            return wrapped_function # function is wrapped at last step
 
         else:
-            return function
+            return function # the function remains unchanged for all step but last
 
 
     # store function and arguments types in the class attribute dictionary
@@ -168,7 +168,7 @@ class Overload_by_class(object) :
         Overload_by_class.function_dict[function_name__arg_types] = function
 
 
-# now this is done: func_name = (decorator(params))(func_name)
+# now this is done: function = (decorator(params))(function)
         
 @Overload_by_class(int, int)
 def area(length, breadth):
