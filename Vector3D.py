@@ -15,9 +15,8 @@ from Point3D import Point3D
 
 
 
-#from overloading import overload
-
 #from OverloadByClass import Overload_by_class#,volume
+
 from Overload_by_class import Overload_by_class#,volume
 
 # >>> v1=Vector3D(1.1,2.2,3.3)
