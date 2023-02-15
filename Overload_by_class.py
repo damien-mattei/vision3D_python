@@ -79,7 +79,7 @@ class Overload_by_class(object) :
     # will be common to all instanciations of this class
     function_dict = {}
     nb_deco = 0 # number of current decorator for same function overload (in case they are multiple)
-    #function_save = None # saved function to be used by all decorator overload in __call__ (in case there is multiple overload for the same function code, exemaple: x + x with x float or int)
+    #function_save = None # saved function to be used by all decorator overload in __call__ (in case there is multiple overload for the same function code, example: x + x with x float or int) DEPRECATED
 
     # this functions handle the parameters of decorator : (decorator(params))
     def __init__(self,*args_decorator):
@@ -99,7 +99,7 @@ class Overload_by_class(object) :
         for arg in args_decorator:
             print("  arg = {}".format(arg))
         # store the decorator arguments for this instantiation
-        # to use them later in the first __call__
+        # to use them later in __call__
         self.args_decorator = args_decorator 
 
 
@@ -113,7 +113,7 @@ class Overload_by_class(object) :
         """
         
         print("OverloadByClass.py : Inside Overload_by_class : __call__()")
-        Overload_by_class.function_save=function # backup the function for other decorator
+        #Overload_by_class.function_save=function # backup the function for other decorator DEPRECATED
         name = function.__name__
         print("  name = {}".format(name))
         
@@ -136,7 +136,7 @@ class Overload_by_class(object) :
         if Overload_by_class.nb_deco == 0:
         
             # this is the function that will be returned
-            def wrapped_function(*args_function):
+            def wrapped_function(*args_function,**kwargs):
 
                 # getting back the good function that match the argument types
                 print("OverloadByClass.py : Inside wrapped_function()")
@@ -151,7 +151,7 @@ class Overload_by_class(object) :
                     raise TypeError('OverloadByClass : wrapped_function : no match : {}'.format(key))
 
                 # returning the evaluation of the previous found function on the arguments
-                return function_found(*args_function)
+                return function_found(*args_function,**kwargs)
             
             #print("After function_found(*args_function)")
 
@@ -159,7 +159,7 @@ class Overload_by_class(object) :
             return wrapped_function # function is wrapped at last step
 
         else:
-            return function # the function remains unchanged for all step but last
+            return function # the function remains unchanged for all step (of reading and initializing decorator when many) but last (until the "stack" is empty (nb_deco return to zero)
 
 
     # store function and arguments types in the class attribute dictionary
@@ -170,14 +170,15 @@ class Overload_by_class(object) :
             raise TypeError("OverloadByClass : store : duplicate registration : " + function_name__arg_types)
         Overload_by_class.function_dict[function_name__arg_types] = function
 
-
 # now this is done: function = (decorator(params))(function)
-        
-@Overload_by_class(int, int)
-def area(length, breadth):
-    calc = length * breadth
-    print (calc)
 
+
+# example with area:
+
+@Overload_by_class(int, int)
+# def area(length, breadth):
+#     calc = length * breadth
+#     print (calc)
 
 @Overload_by_class(int, float)
 def area(length, breadth):
@@ -190,36 +191,59 @@ def area(size):
     print (calc)
 
 
-# >>> area(2,3)
-# Inside wrapped_function()
+# >>> 
+# = RESTART: /Users/mattei/Library/CloudStorage/Dropbox/git/vision3D_python/Overload_by_class.py =
+# OverloadByClass.py : Inside Overload_by_class : __init__()
+# OverloadByClass.py : Inside Overload_by_class : __init__  : Overload_by_class.nb_deco = 1 
+# OverloadByClass.py : Overload_by_class @ 0x7f90785a3e20
+#   arg = <class 'int'>
+#   arg = <class 'int'>
+# OverloadByClass.py : Inside Overload_by_class : __init__()
+# OverloadByClass.py : Inside Overload_by_class : __init__  : Overload_by_class.nb_deco = 2 
+# OverloadByClass.py : Overload_by_class @ 0x7f90785a3850
+#   arg = <class 'int'>
+#   arg = <class 'float'>
+# OverloadByClass.py : Inside Overload_by_class : __call__()
 #   name = area
-#   key = ('area', (<class 'int'>, <class 'int'>))
+#   key = ('area', ('int', 'float'))
+# OverloadByClass.py : Inside Overload_by_class : __call__ : Overload_by_class.nb_deco = 1 
+
+# OverloadByClass.py : Inside Overload_by_class : __call__()
+#   name = area
+#   key = ('area', ('int', 'int'))
+# OverloadByClass.py : Inside Overload_by_class : __call__ : Overload_by_class.nb_deco = 0 
+
+# OverloadByClass.py : Inside Overload_by_class : __init__()
+# OverloadByClass.py : Inside Overload_by_class : __init__  : Overload_by_class.nb_deco = 1 
+# OverloadByClass.py : Overload_by_class @ 0x7f90785a3e20
+#   arg = <class 'int'>
+# OverloadByClass.py : Inside Overload_by_class : __call__()
+#   name = area
+#   key = ('area', ('int',))
+# OverloadByClass.py : Inside Overload_by_class : __call__ : Overload_by_class.nb_deco = 0 
+
+# >>> area(2,3)
+# OverloadByClass.py : Inside wrapped_function()
+# OverloadByClass : wrapped_function :  name = area
+# OverloadByClass : wrapped_function :  key = ('area', ('int', 'int'))
 # 6
 # >>> area(2,3.2)
-# Inside wrapped_function()
-#   name = area
-#   key = ('area', (<class 'int'>, <class 'float'>))
+# OverloadByClass.py : Inside wrapped_function()
+# OverloadByClass : wrapped_function :  name = area
+# OverloadByClass : wrapped_function :  key = ('area', ('int', 'float'))
 # 6.4
 
-# >>> area(2)
+# >>> area(3)
 # Inside wrapped_function()
 #   name = area
 #   key = ('area', (<class 'int'>,))
-# 4
+# 9
 
 
-# Inside Overload_by_class : __init__()
-# Inside Overload_by_class : __call__()
-#   name = area
-#   key = ('area', (<class 'int'>, <class 'int'>))
-# Inside Overload_by_class : __init__()
-# Inside Overload_by_class : __call__()
-#   name = area
-#   key = ('area', (<class 'int'>, <class 'float'>))
-# Inside Overload_by_class : __init__()
-# Inside Overload_by_class : __call__()
-#   name = area
-#   key = ('area', (<class 'int'>,))
+    
+    
+# example with volume:
+
 # Inside Overload_by_class : __init__()
 # Inside Overload_by_class : __call__()
 #   name = volume
@@ -234,31 +258,21 @@ def area(size):
 #   name = volume
 #   key = ('volume', (<class 'int'>,))
 # 27
-# >>> area(3)
-# Inside wrapped_function()
-#   name = area
-#   key = ('area', (<class 'int'>,))
-# 9
-# >>> area(2,3)
-# Inside wrapped_function()
-#   name = area
-#   key = ('area', (<class 'int'>, <class 'int'>))
-# 6
 # >>> volume(2,3,4)
 # Inside wrapped_function()
 #   name = volume
 #   key = ('volume', (<class 'int'>, <class 'int'>, <class 'int'>))
 # 24
 
-@Overload_by_class(int)
-def volume(size):
-    calc =  size * size *  size
-    print (calc)
+# @Overload_by_class(int)
+# def volume(size):
+#     calc =  size * size *  size
+#     print (calc)
 
-@Overload_by_class(int,int,int)
-def volume(length, breadth,depth):
-    calc =  length * breadth *  depth
-    print (calc)
+# @Overload_by_class(int,int,int)
+# def volume(length, breadth,depth):
+#     calc =  length * breadth *  depth
+#     print (calc)
 
 ########################################################################
 

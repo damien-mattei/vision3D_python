@@ -93,7 +93,7 @@ class Matrix3x3:
 
     # >>> Matrix3x3.checkSquare3x3Matrix(vis.m3x3.M)
     # True
-    def checkSquare3x3Matrix(M):
+    def checkSquare3x3Matrix(M): # strange why this function does not need a self to be called later in class ?!
 
         return len(M) == 3 and len(M[0]) == 3 and len(M[1]) == 3 and len(M[2]) == 3
 
@@ -132,9 +132,9 @@ class Matrix3x3:
         M22 = self.M[2][2]
             
         return 'Matrix3D @ {} \n[[{},{},{}]\n [{},{},{}]\n [{},{},{}]]'.format(hex(id(self)),
-                                                                         M00,M01,M02,
-                                                                         M10,M11,M12,
-                                                                         M20,M21,M22)
+                                                                               M00,M01,M02,
+                                                                               M10,M11,M12,
+                                                                               M20,M21,M22)
 
 
     # >>> print(vis.m3x3)

@@ -10,15 +10,15 @@ various overload implementations and examples.
 # Syntax for decorators with parameters
 
 # @decorator(params)
-# def func_name():
+# def function():
 #     ''' Function implementation'''
 
 # The above code is equivalent to
 
-# def func_name():
+# def function():
 #     ''' Function implementation'''
 
-# func_name = (decorator(params))(func_name)
+# function = (decorator(params))(function)
 # """
 
 
@@ -44,7 +44,7 @@ def overload_by_Function(*args_decorator):
         overload_by_Function.function_dict[function_name__arg_types] = function
 
     
-    # we define a function to be used like this : (decorator(params))(func_name)
+    # we define a function to be used like this : (decorator(params))(function)
     def wrap(function):
 
         # wrap knows *args_decorator
@@ -81,7 +81,14 @@ def overload_by_Function(*args_decorator):
     
     return wrap
 
+
+
 overload_by_Function.function_dict = {}
+
+
+
+
+
 
 @overload_by_Function(int, int)
 def area3(length, breadth):

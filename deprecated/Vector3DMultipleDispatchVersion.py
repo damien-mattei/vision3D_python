@@ -229,7 +229,7 @@ class Vector3D:
                         self.y * m,
                         self.z * m)
 
-    @dispatch('Vector3D', 'Vector3D')
+    @dispatch(Vector3D, Vector3D)
     def __mul__(self,m): # self * m
 
         if __debug__:
