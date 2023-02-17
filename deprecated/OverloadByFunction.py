@@ -59,7 +59,7 @@ def overload_by_Function(*args_decorator):
         store(key,function)
 
         # this is the final used function
-        def wrapped_function(*args_function):
+        def wrapped_function(*args_function,**kwargs):
 
             # getting back the good function that match the argument types
             print("Inside wrapped_function()")
@@ -74,7 +74,7 @@ def overload_by_Function(*args_decorator):
                 raise TypeError("no match")
 
             # returning the evaluation of the previous found function on the arguments
-            return function_found(*args_function)
+            return function_found(*args_function,**kwargs)
             print("After function_found(*args_function)")
 
         return wrapped_function
@@ -87,7 +87,10 @@ overload_by_Function.function_dict = {}
 
 
 
-
+@overload_by_Function(int)
+def area3(size):
+    calc =  size * size
+    print (calc)
 
 
 @overload_by_Function(int, int)
@@ -97,10 +100,7 @@ def area3(length, breadth):
 
 
 
-@overload_by_Function(int)
-def area3(size):
-    calc =  size * size
-    print (calc)
+
 
 
 # Inside wrap()

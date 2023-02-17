@@ -175,32 +175,16 @@ class Overload_by_class(object) :
 
 # example with area:
 
-@Overload_by_class(int, int)
-# def area(length, breadth):
-#     calc = length * breadth
-#     print (calc)
 
-@Overload_by_class(int, float)
-def area(length, breadth):
-    calc = length * breadth
-    print (calc)
-
-@Overload_by_class(int)
-def area(size):
-    calc =  size * size
-    print (calc)
-
-
-# >>> 
 # = RESTART: /Users/mattei/Library/CloudStorage/Dropbox/git/vision3D_python/Overload_by_class.py =
 # OverloadByClass.py : Inside Overload_by_class : __init__()
 # OverloadByClass.py : Inside Overload_by_class : __init__  : Overload_by_class.nb_deco = 1 
-# OverloadByClass.py : Overload_by_class @ 0x7f90785a3e20
+# OverloadByClass.py : Overload_by_class @ 0x7f81782ace20
 #   arg = <class 'int'>
 #   arg = <class 'int'>
 # OverloadByClass.py : Inside Overload_by_class : __init__()
 # OverloadByClass.py : Inside Overload_by_class : __init__  : Overload_by_class.nb_deco = 2 
-# OverloadByClass.py : Overload_by_class @ 0x7f90785a3850
+# OverloadByClass.py : Overload_by_class @ 0x7f81782ac850
 #   arg = <class 'int'>
 #   arg = <class 'float'>
 # OverloadByClass.py : Inside Overload_by_class : __call__()
@@ -215,29 +199,34 @@ def area(size):
 
 # OverloadByClass.py : Inside Overload_by_class : __init__()
 # OverloadByClass.py : Inside Overload_by_class : __init__  : Overload_by_class.nb_deco = 1 
-# OverloadByClass.py : Overload_by_class @ 0x7f90785a3e20
+# OverloadByClass.py : Overload_by_class @ 0x7f81782ace20
 #   arg = <class 'int'>
 # OverloadByClass.py : Inside Overload_by_class : __call__()
 #   name = area
 #   key = ('area', ('int',))
 # OverloadByClass.py : Inside Overload_by_class : __call__ : Overload_by_class.nb_deco = 0 
 
-# >>> area(2,3)
-# OverloadByClass.py : Inside wrapped_function()
-# OverloadByClass : wrapped_function :  name = area
-# OverloadByClass : wrapped_function :  key = ('area', ('int', 'int'))
-# 6
-# >>> area(2,3.2)
-# OverloadByClass.py : Inside wrapped_function()
-# OverloadByClass : wrapped_function :  name = area
-# OverloadByClass : wrapped_function :  key = ('area', ('int', 'float'))
-# 6.4
+@Overload_by_class(int, int)
+# def area(length, breadth):
+#     calc = length * breadth
+#     print (calc)
+
+@Overload_by_class(int, float)
+def area(length, breadth):
+    calc = length * breadth
+    print (calc)
+
 
 # >>> area(3)
-# Inside wrapped_function()
-#   name = area
-#   key = ('area', (<class 'int'>,))
+# OverloadByClass.py : Inside wrapped_function()
+# OverloadByClass : wrapped_function :  name = area
+# OverloadByClass : wrapped_function :  key = ('area', ('int',))
 # 9
+@Overload_by_class(int)
+def area(size):
+    calc =  size * size
+    print (calc)
+
 
 
     
