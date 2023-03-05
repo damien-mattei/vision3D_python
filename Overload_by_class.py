@@ -118,6 +118,9 @@ class Overload_by_class(object) :
         print("  name = {}".format(name))
         
         args_deco=self.args_decorator
+
+        len_args_deco = len(args_deco)
+        
         # x is a type or a string representing a type, result of lambda will always be a string in all case representing the type 
         f_stringify = lambda x : x if type(x) is str else x.__name__
         args_deco_string=tuple(map(f_stringify,args_deco))
@@ -125,8 +128,16 @@ class Overload_by_class(object) :
         key = (name,args_deco_string)
         print("  key = {}".format(key))
 
+        default_key = (name,len_args_deco)
+        print("  default_key = {}".format(default_key))
+
         # store function and arguments types in the class attribute dictionary
         Overload_by_class.store(key,function)
+
+        # store function and number of arguments in the class attribute dictionary for the default fallback function to call
+        # in case no type match but function name and number of arguments match
+        Overload_by_class.store(default_key,function)
+        
         
         Overload_by_class.nb_deco -= 1
         print("OverloadByClass.py : Inside Overload_by_class : __call__ : Overload_by_class.nb_deco = {} ".format(Overload_by_class.nb_deco))
@@ -148,7 +159,13 @@ class Overload_by_class(object) :
                 function_found = Overload_by_class.function_dict.get(key)
 
                 if function_found is None:
-                    raise TypeError('OverloadByClass : wrapped_function : no match : {}'.format(key))
+                    # search by same number of arguments
+                    len_args_function = len(args_function)
+                    default_key = (name,len_args_function)
+                    print("OverloadByClass : wrapped_function :  default_key = {}".format(default_key))
+                    function_found = Overload_by_class.function_dict.get(default_key)
+                    if function_found is None:
+                        raise TypeError('OverloadByClass : wrapped_function : no match : {}'.format(key))
 
                 # returning the evaluation of the previous found function on the arguments
                 return function_found(*args_function,**kwargs)
@@ -164,13 +181,20 @@ class Overload_by_class(object) :
 
     # store function and arguments types in the class attribute dictionary
     @classmethod
-    def store(cls,function_name__arg_types, function):
+    def store(cls,key, function):
 
-        if function_name__arg_types in Overload_by_class.function_dict:
-            raise TypeError("OverloadByClass : store : duplicate registration : " + function_name__arg_types)
-        Overload_by_class.function_dict[function_name__arg_types] = function
+        print("OverloadByClass : store :")
+        print(key)
+
+        # if key in Overload_by_class.function_dict:
+        #       raise TypeError("OverloadByClass : store : duplicate registration")
+        
+        Overload_by_class.function_dict[key] = function
 
 # now this is done: function = (decorator(params))(function)
+
+
+
 
 
 # example with area:
