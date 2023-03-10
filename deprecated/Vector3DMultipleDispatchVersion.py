@@ -15,7 +15,11 @@ from Point3D import Point3D
 
 from multipledispatch import dispatch
 
-
+# this is "like" a type definition to avoid error of undefined type during definition of the final Class
+# ,an "Abstract" class that will be overwritten by the final one but used
+# to pre-define the type Vector3D and use it in the definition of Vector3D itself.
+class Vector3D:
+    pass
 
 
 # >>> v1=Vector3D(1.1,2.2,3.3)

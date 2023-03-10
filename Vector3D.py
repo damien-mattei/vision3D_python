@@ -13,109 +13,91 @@ import math
 from Point3D import Point3D
 
 
+from multimethod import multimethod
 
+#from Overload_by_class import Overload_by_class
 
-#from OverloadByClass import Overload_by_class#,volume
+from typing import Union
 
-from Overload_by_class import Overload_by_class#,volume
+Numeric = Union[float, int]
+
 
 # >>> v1=Vector3D(1.1,2.2,3.3)
-# Inside wrapped_function()
-#   name = __init__
-#   key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
 
 # Vector3D constructor #
 #class Vector3D(object):
 class Vector3D:
     '''Construct an object Vector3D.'''
 
-    # v1=Vector3D(1.1,2.2,3.3)
 
-    #v2=Vector3D() # does not work because before __init__ ?
-
-
-    #v2=Vector3D()
-    #Inside wrapped_function()
-     #  name = __init__
-    #   key = ('__init__', ('Vector3D',))
-    # # Vector3D constructor #
+    # >> v2=Vector3D()
+    # # Vector3D of float constructor #
     # >>> v2
-    # Inside wrapped_function()
-    #   name = __repr__
-    #   key = ('__repr__', ('Vector3D',))
-    # Vector3D @ 0x111d55e20 [0.0,0.0,0.0]
-    @Overload_by_class('Vector3D')
-    def __init__(self,x=0.0,y=0.0,z=0.0):
+    # Vector3D @ 0x7fee25c54790 [0.0,0.0,0.0]
+    # >>> v1=Vector3D(1.1,2.2,3.3)
+    # # Vector3D of Numeric constructor #
+    # >>> v1
+    # Vector3D @ 0x7fee25c47cd0 [1.1,2.2,3.3]
+   
 
-        self.x = x 
-        self.y = y
-        self.z = z
+    @multimethod
+    def __init__(self):
+
 
         if __debug__:
-            print("# Vector3D constructor #")
-
+            print("# Vector3D of float constructor #")
             
-    @Overload_by_class('Vector3D',float,float,float)
-    def __init__(self,x=0.0,y=0.0,z=0.0):
+        self.x = 0.0
+        self.y = 0.0
+        self.z = 0.0
 
-        self.x = x 
+        
+
+
+    @multimethod
+    def __init__(self,x : Numeric,y : Numeric,z : Numeric):
+
+        if __debug__:
+            print("# Vector3D of Numeric constructor #")
+
+        self.x = x
         self.y = y
         self.z = z
 
-        if __debug__:
-            print("# Vector3D constructor #")
-
-
-    @Overload_by_class('Vector3D',int,int,int)
-    def __init__(self,x=0,y=0,z=0):
-
-        self.x = x 
-        self.y = y
-        self.z = z
-
-        if __debug__:
-            print("# Vector3D constructor #")
-
-
-
+       
+            
     # create vector AB with points A and B
     
     #v=Vector3D(Point3D(1.0,1.0,1.0),Point3D(3.0,3.0,3.0))
-    #     # Point3D constructor #
-    # # Point3D constructor #
-    # Inside wrapped_function()
-    #   name = __init__
-    #   key = ('__init__', ('Vector3D', 'Point3D', 'Point3D'))
-    # # Vector3D constructor #
-    # >>> v
-    # Inside wrapped_function()
-    #   name = __repr__
-    #   key = ('__repr__', ('Vector3D',))
-    # Vector3D @ 0x113aac910 [2.0,2.0,2.0]
-    @Overload_by_class('Vector3D',Point3D,Point3D)
-    def __init__(self,a=Point3D(),b=Point3D()):
-        
+
+    # Point3D constructor #
+    # Point3D constructor #
+    # Vector3D (Point3D,Point3D)constructor #
+    #>>> v
+    #Vector3D @ 0x7fee274d4fd0 [2.0,2.0,2.0]
+    @multimethod
+    def __init__(self,a : Point3D,b : Point3D):
+
+        if __debug__:
+            print("# Vector3D (Point3D,Point3D)constructor #")
+      
         self.x = b.x - a.x
         self.y = b.y - a.y
         self.z = b.z - a.z
 
-        if __debug__:
-            print("# Vector3D constructor #")
-
+        
 
             
     #v=Vector3D((1,2,3),(4,5,6))
-    #   Overload.py : Inside wrapped_function()
-    #   name = __init__
-    #   key = ('__init__', ('Vector3D', 'tuple', 'tuple'))
-    # # Vector3D constructor #
-    # >>> v
-    # Overload.py : Inside wrapped_function()
-    #   name = __repr__
-    #   key = ('__repr__', ('Vector3D',))
-    # Vector3D @ 0x111100e20 [3,3,3]
-    @Overload_by_class('Vector3D',tuple,tuple)
-    def __init__(self,a,b):
+
+    # Vector3D (tuple,tuple) constructor #
+    #>>> v
+    #Vector3D @ 0x7fee2655ced0 [3,3,3]
+    @multimethod
+    def __init__(self,a : tuple,b : tuple):
+
+        if __debug__:
+            print("# Vector3D (tuple,tuple) constructor #")
 
         (ax,ay,az)=a
         (bx,by,bz)=b
@@ -123,13 +105,10 @@ class Vector3D:
         self.y = by - ay
         self.z = bz - az
 
-        if __debug__:
-            print("# Vector3D constructor #")
+        
             
     # v1
     # Vector3D @ 0x7f7ded7869d0 [1,2.2,3.3]
-
-    #@Overload_by_class('Vector3D') # pourquoi j'avais surchargé __repr__ ? inutile!
     def __repr__(self):
         return 'Vector3D @ {} [{},{},{}]'.format(hex(id(self)),self.x,self.y,self.z)
 
@@ -207,33 +186,33 @@ class Vector3D:
         return cls(x,y,z)
     
 
-# >>> p1=Point3D()
-# # Point3D constructor #
-# >>> p2=Point3D()
-# # Point3D constructor #
-# >>> v2=Vector3D(10.0,2.0,3.0)
-# OverloadByClass.py : Inside wrapped_function()
-# OverloadByClass : wrapped_function :  name = __init__
-# OverloadByClass : wrapped_function :  key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
-# # Vector3D constructor #
-# >>> v=Vector3D(1.0,2.0,3.0)
-# OverloadByClass.py : Inside wrapped_function()
-# OverloadByClass : wrapped_function :  name = __init__
-# OverloadByClass : wrapped_function :  key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
-# # Vector3D constructor #
-# >>> v.set_with_points(p1,p2)
-# >>> v
-# Vector3D @ 0x7f328e743450 [0.0,0.0,0.0]
-# >>> v=Vector3D(1.0,2.0,3.0)
-# OverloadByClass.py : Inside wrapped_function()
-# OverloadByClass : wrapped_function :  name = __init__
-# OverloadByClass : wrapped_function :  key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
-# # Vector3D constructor #
-# >>> v
-# Vector3D @ 0x7f328e743b50 [1.0,2.0,3.0]
-# >>> v.set_with_points(p1,p2)
-# >>> v
-# Vector3D @ 0x7f328e743b50 [0.0,0.0,0.0]
+    # >>> p1=Point3D()
+    # # Point3D constructor #
+    # >>> p2=Point3D()
+    # # Point3D constructor #
+    # >>> v2=Vector3D(10.0,2.0,3.0)
+    # OverloadByClass.py : Inside wrapped_function()
+    # OverloadByClass : wrapped_function :  name = __init__
+    # OverloadByClass : wrapped_function :  key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
+    # # Vector3D constructor #
+    # >>> v=Vector3D(1.0,2.0,3.0)
+    # OverloadByClass.py : Inside wrapped_function()
+    # OverloadByClass : wrapped_function :  name = __init__
+    # OverloadByClass : wrapped_function :  key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
+    # # Vector3D constructor #
+    # >>> v.set_with_points(p1,p2)
+    # >>> v
+    # Vector3D @ 0x7f328e743450 [0.0,0.0,0.0]
+    # >>> v=Vector3D(1.0,2.0,3.0)
+    # OverloadByClass.py : Inside wrapped_function()
+    # OverloadByClass : wrapped_function :  name = __init__
+    # OverloadByClass : wrapped_function :  key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
+    # # Vector3D constructor #
+    # >>> v
+    # Vector3D @ 0x7f328e743b50 [1.0,2.0,3.0]
+    # >>> v.set_with_points(p1,p2)
+    # >>> v
+    # Vector3D @ 0x7f328e743b50 [0.0,0.0,0.0]
     def set_with_points(self,a,b):
 
         ax = a.x
@@ -279,12 +258,11 @@ class Vector3D:
     # OverloadByClass : wrapped_function :  key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
     # # Vector3D constructor #
     # Vector3D @ 0x7f2159337d50 [3.3000000000000003,6.6000000000000005,9.899999999999999]
-    @Overload_by_class('Vector3D', float)
-    @Overload_by_class('Vector3D', int)
-    def __mul__(self,m): # self * m
+    @multimethod
+    def __mul__(self,m : Numeric): # self * m
 
         if __debug__:
-            print("Vector3D.py : __mul__ ('Vector3D', float)")
+            print("Vector3D.py : __mul__ (Vector3D, Numeric)")
 
         # number multiplication
         return Vector3D(self.x * m,
@@ -292,88 +270,44 @@ class Vector3D:
                         self.z * m)
 
     # dot product - produit scalaire
-    @Overload_by_class('Vector3D', 'Vector3D')
-    def __mul__(self,m): # self * m
+    # >>> v1=Vector3D(1.1,2.2,3.3)
+    # # Vector3D of Numeric constructor #
+    # >>> v2=Vector3D(2.1,2.7,-3.3)
+    # # Vector3D of Numeric constructor #
+    # >>> v1*v2
+    # Vector3D.py : __mul__(Vector3D, 'Vector3D')
+    # -2.639999999999997
+    @multimethod
+    def __mul__(self,m : object): #"Vector3D"): # self * m
 
         if __debug__:
-            print("Vector3D.py : __mul__('Vector3D', 'Vector3D')")
+            print("Vector3D.py : __mul__(Vector3D, 'Vector3D')")
 
         # dot product - produit scalaire
         return self.x * m.x + self.y * m.y + self.z * m.z
 
 
     
-    # DEPRECATED
-    def backup__mul__(self,m): # self * m
-
-        if __debug__:
-            print("Vector3D.py : __mul__")
-
-        # this creates operator overload
-        if isinstance(m,Vector3D): # dot product - produit scalaire
-            return self.x * m.x + self.y * m.y + self.z * m.z
-        else:  # number multiplication
-            return Vector3D(self.x * m,
-                            self.y * m,
-                            self.z * m)
-    
-        
-    
-   
-    # DEPRECATED
-    def backup__rmul__(self, m): #  self is at RIGHT of multiplication operand : m * self
-
-        if __debug__:
-            print("Vector3D.py : __rmul__")
-
-        # this creates operator overload
-        if isinstance(m,list): # matrix multiplication TODO: change list with a Matrix3X3 class
-
-            x = self.x
-            y = self.y
-            z = self.z
-            
-            return Vector3D(m[0][0] * x + m[0][1] * y + m[0][2] * z,
-                            m[1][0] * x + m[1][1] * y + m[1][2] * z,
-                            m[2][0] * x + m[2][1] * y + m[2][2] * z)
-
-        else: # number multiplication
-
-            # return Vector3D(self.x * m,
-            #                 self.y * m,
-            #                 self.z * m)
-        
-            return self * m # self is at LEFT of operand *
-
 
 
         
     # right multiplication (non commutative)
-        
+
     # >>> v1=Vector3D(1.1,2.2,3.3)
-    # OverloadByClass.py : Inside wrapped_function()
-    # OverloadByClass : wrapped_function :  name = __init__
-    # OverloadByClass : wrapped_function :  key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
-    # # Vector3D constructor #
+    # # Vector3D of Numeric constructor #
     # >>> m3d = [[1 , 2 , 3],[4 , 5, 6],[7, 8, 9]]
     # >>> m3d*v1
-    # OverloadByClass.py : Inside wrapped_function()
-    # OverloadByClass : wrapped_function :  name = __rmul__
-    # OverloadByClass : wrapped_function :  key = ('__rmul__', ('Vector3D', 'list'))
-    # Vector3D.py : __rmul__(list, 'Vector3D')
-    # OverloadByClass.py : Inside wrapped_function()
-    # OverloadByClass : wrapped_function :  name = __init__
-    # OverloadByClass : wrapped_function :  key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
-    # # Vector3D constructor #
-    # Vector3D @ 0x7f8a275025d0 [15.399999999999999,35.199999999999996,55.0]
+    # Vector3D.py : __rmul__(Vector3D , list)
+    # # Vector3D of Numeric constructor #
+    # Vector3D @ 0x7fee25c47cd0 [15.399999999999999,35.199999999999996,55.0]
     
-    # m  : multiplicand ,matrix,....
+    # m  : multiplicand ,list matrix,....
     
-    @Overload_by_class('Vector3D',list)
-    def __rmul__(self, m): #  self is at RIGHT of multiplication operand : m * self
+    @multimethod
+    def __rmul__(self, m : list): #  self is at RIGHT of multiplication operand : m * self
 
         if __debug__:
-            print("Vector3D.py : __rmul__(list, 'Vector3D')")
+            print("Vector3D.py : __rmul__(Vector3D , list)")
 
         x = self.x
         y = self.y
@@ -403,16 +337,12 @@ class Vector3D:
     # OverloadByClass : wrapped_function :  key = ('__init__', ('Vector3D', 'float', 'float', 'float'))
     # Vector3D constructor #
     # Vector3D @ 0x7f80060e0d10 [2.2,4.4,6.6]
-    @Overload_by_class('Vector3D',float)
-    def __rmul__(self, m): #  self is at RIGHT of multiplication operand : m * self
+    @multimethod
+    def __rmul__(self, m : Numeric): #  self is at RIGHT of multiplication operand : m * self
 
         if __debug__:
-            print("Vector3D.py : __rmul__('Vector3D',float)")
+            print("Vector3D.py : __rmul__(Vector3D,Numeric)")
 
-        # return Vector3D(self.x * m,
-        #                 self.y * m,
-        #                 self.z * m)
-        
         return self * m # self is at LEFT of operand *
 
         
@@ -449,6 +379,8 @@ class Vector3D:
     # cross product - produit vectoriel
     # operator syntax: v ^ v2
     # WARNING: this is not XOR but CROSS PRODUCT
+    # WARNING: cross product is not associative:
+    # v1 ^ v2 ^ v3 = (v1 ^ v2) ^ v3 ≠ v1 ^ (v2 ^ v3)
     def __xor__(self,v):
 
         x = self.x
